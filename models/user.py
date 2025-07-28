@@ -1,5 +1,5 @@
-from sqlmodel import SQLModel, Field
-from typing import Optional
+from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional, List
 from enum import Enum
 from pydantic import BaseModel
 
@@ -13,6 +13,10 @@ class User(SQLModel, table=True):
     email: str = Field(index=True, unique=True)
     hashed_password: str
     role: Role = Field(default=Role.USER)
+    
+    # Relationships
+    messages: List["Message"] = Relationship(back_populates="user")
+    rooms: List["Room"] = Relationship(back_populates="created_by_user")
 
 
 class UserCreate(BaseModel):
